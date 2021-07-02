@@ -4,3 +4,4 @@ target/
 .hc
 .cargo
 *.log
+*.dna

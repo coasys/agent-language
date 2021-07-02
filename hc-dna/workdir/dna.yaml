@@ -1,0 +1,8 @@
+---
+manifest_version: 1
+name: "agent-store"
+uid: 00000000-0000-0000-0000-000000000000
+properties: {}
+zomes: 
+  - name: agent_store
+    bundled: ../target/wasm32-unknown-unknown/release/agent_store.wasm

@@ -39,6 +39,14 @@ pub struct Did(String);
 #[hdk_entry(id = "agent_expression", visbility = "public")]
 #[derive(Clone)]
 pub struct AgentExpression {
+    pub author: String,
+    pub timestamp: String,
+    pub data: AgentExpressionData,
+    pub proof: ExpressionProof,
+}
+
+#[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
+pub struct AgentExpressionData {
     did: String,
     perspective: Option<Perspective>,
     #[serde(rename(serialize = "directMessageLanguage"))]
@@ -58,7 +66,7 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
 
 #[hdk_extern]
 pub fn create_agent_expression(agent_expression: AgentExpression) -> ExternResult<()> {
-    let did = Did(agent_expression.did.clone());
+    let did = Did(agent_expression.author.clone());
     let did_hash = hash_entry(&did)?;
 
     create_entry(&did)?;

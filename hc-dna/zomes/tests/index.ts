@@ -19,6 +19,48 @@ orchestrator.registerScenario("create update agent expression", async (s, t) => 
      
     await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
       {
+        author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
+        timestamp: "ISO",
+        data: {
+          did: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
+          perspective: {
+            links: [
+              {
+                author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
+                timestamp: "ISO",    
+                data: {
+                  source: "language://src",
+                  target: "language://target",
+                  predicate: "language://pred"
+                },
+                proof: {
+                  signature: "sig",
+                  key: "key",
+                  valid: true,
+                  invalid: false,
+                },
+              }
+            ]
+          },
+          directMessageLanguage: "language://hashyHash"
+        },
+        proof: {
+          signature: "sig",
+          key: "key",
+          valid: true,
+          invalid: false,
+        },
+      })
+    
+    let getResp = await alice_sc_happ.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
+    t.ok(getResp);
+    t.deepEqual(getResp.data.directMessageLanguage, "language://hashyHash");
+
+    await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
+    {
+      author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
+      timestamp: "ISO",
+      data: {
         did: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
         perspective: {
           links: [
@@ -39,41 +81,19 @@ orchestrator.registerScenario("create update agent expression", async (s, t) => 
             }
           ]
         },
-        directMessageLanguage: "language://hashyHash"
-      })
-    
-    let getResp = await alice_sc_happ.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
-    t.ok(getResp);
-    t.deepEqual(getResp.directMessageLanguage, "language://hashyHash");
-
-    await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
-    {
-      did: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
-      perspective: {
-        links: [
-          {
-            author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
-            timestamp: "ISO",    
-            data: {
-              source: "language://src",
-              target: "language://target",
-              predicate: "language://pred"
-            },
-            proof: {
-              signature: "sig",
-              key: "key",
-              valid: true,
-              invalid: false,
-            },
-          }
-        ]
+        directMessageLanguage: "language://hashyHash2"
       },
-      directMessageLanguage: "language://hashyHash2"
+      proof: {
+        signature: "sig",
+        key: "key",
+        valid: true,
+        invalid: false,
+      },
     })
 
     let getResp2 = await alice_sc_happ.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
     t.ok(getResp2);
-    t.deepEqual(getResp2.directMessageLanguage, "language://hashyHash2");
+    t.deepEqual(getResp2.data.directMessageLanguage, "language://hashyHash2");
 })
 
 // Run all registered scenarios as a final step, and gather the report,

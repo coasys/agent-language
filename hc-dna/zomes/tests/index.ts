@@ -20,14 +20,14 @@ orchestrator.registerScenario("create update agent expression", async (s, t) => 
     await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
       {
         author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
-        timestamp: "ISO",
+        timestamp: new Date().toISOString(),
         data: {
           did: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
           perspective: {
             links: [
               {
                 author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
-                timestamp: "ISO",    
+                timestamp: new Date().toISOString(),    
                 data: {
                   source: "language://src",
                   target: "language://target",
@@ -59,14 +59,14 @@ orchestrator.registerScenario("create update agent expression", async (s, t) => 
     await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
     {
       author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
-      timestamp: "ISO",
+      timestamp: new Date().toISOString(),
       data: {
         did: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
         perspective: {
           links: [
             {
               author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
-              timestamp: "ISO",    
+              timestamp: new Date().toISOString(),    
               data: {
                 source: "language://src",
                 target: "language://target",

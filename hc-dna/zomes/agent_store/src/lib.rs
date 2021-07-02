@@ -1,4 +1,5 @@
 use hdk::prelude::*;
+use chrono::{DateTime, Utc};
 
 mod utils;
 
@@ -22,7 +23,7 @@ pub struct ExpressionProof {
 #[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
 pub struct LinkExpression {
     author: String,
-    timestamp: String,    
+    timestamp: DateTime<Utc>,    
     data: Link,
     proof: ExpressionProof,
 }
@@ -40,7 +41,7 @@ pub struct Did(String);
 #[derive(Clone)]
 pub struct AgentExpression {
     pub author: String,
-    pub timestamp: String,
+    pub timestamp: DateTime<Utc>,
     pub data: AgentExpressionData,
     pub proof: ExpressionProof,
 }

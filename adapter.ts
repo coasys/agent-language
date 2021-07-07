@@ -35,7 +35,6 @@ class Sharing implements PublicSharing {
   }
 
   async createPublic(content: object): Promise<Address> {
-    console.log("AGENT LANGUAGE createPublic:", content);
 
     if(!content['did'] || !content['perspective'] || !content['perspective'].links)
       throw "Content must be an Agent object"
@@ -50,9 +49,9 @@ class Sharing implements PublicSharing {
     //    obj[key] = agent[key];
     //    return obj;
     //  }, {});
-    console.log("Storing my Agent Expression with DID:", agent.did);
+    //console.log("Storing my Agent Expression with DID:", agent.did);
     const expression = this.#agent.createSignedExpression(agent);
-    console.log("Posting agent expression", expression);
+    //console.log("Posting agent expression", expression);
     await this.#DNA.call(
       DNA_NICK,
       "agent_store",

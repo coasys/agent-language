@@ -1,5 +1,5 @@
 import type { Address, Agent, Language, LanguageContext, HolochainLanguageDelegate, Interaction } from "@perspect3vism/ad4m";
-import AgentAdapter from "./adapter";
+import ExpressionAdapter from "./adapter";
 import Icon from "./build/Icon.js";
 import ConstructorIcon from "./build/ConstructorIcon.js";
 import { UI } from "./expressionUI";
@@ -23,12 +23,12 @@ export default async function create(context: LanguageContext): Promise<Language
   const Holochain = context.Holochain as HolochainLanguageDelegate;
   await Holochain.registerDNAs([{ file: DNA, nick: DNA_NICK }]);
 
-  const agentAdapter = new AgentAdapter(context);
+  const expressionAdapter = new ExpressionAdapter(context);
   const expressionUI = new UI();
 
   return {
     name,
-    agentAdapter,
+    expressionAdapter,
     iconFor,
     constructorIcon,
     interactions,

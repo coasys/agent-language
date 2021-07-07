@@ -1,33 +1,18 @@
-import type { Address, Expression, PublicSharing, LanguageContext, HolochainLanguageDelegate, AgentAdapter, AgentExpression, AgentService } from "@perspect3vism/ad4m";
+import type { Address, Agent, Expression, PublicSharing, LanguageContext, HolochainLanguageDelegate, ExpressionAdapter, AgentExpression, AgentService } from "@perspect3vism/ad4m";
 import { DNA_NICK } from "./dna";
 
-export default class AgentAdapterImpl implements AgentAdapter {
+export default class ExpressionAdapterImpl implements ExpressionAdapter {
   #DNA: HolochainLanguageDelegate;
   #agent: AgentService;
+  putAdapter: PublicSharing
 
   constructor(context: LanguageContext) {
     this.#DNA = context.Holochain as HolochainLanguageDelegate;
-    this.#agent = context.agent; 
+    this.#agent = context.agent;
+    this.putAdapter = new Sharing(context)
   }
 
-  async setProfile(agentExpression: AgentExpression) {
-    const agentExpressionOrdered = Object.keys(agentExpression)
-      .sort()
-      .reduce((obj, key) => {
-        obj[key] = agentExpression[key];
-        return obj;
-      }, {});
-    const expression = this.#agent.createSignedExpression(agentExpressionOrdered);
-    console.log("Posting agent expression", expression);
-    await this.#DNA.call(
-      DNA_NICK,
-      "agent_store",
-      "create_agent_expression",
-      expression
-    );
-  };
-
-  async getProfile(did: string): Promise<AgentExpression|void> {
+  async get(did: Address): Promise<AgentExpression|void> {
     console.log("Getting expression with did", did);
     const expression = await this.#DNA.call(
       DNA_NICK,
@@ -38,4 +23,43 @@ export default class AgentAdapterImpl implements AgentAdapter {
 
     return expression
   };
+}
+
+class Sharing implements PublicSharing {
+  #DNA: HolochainLanguageDelegate;
+  #agent: AgentService;
+
+  constructor(context: LanguageContext) {
+    this.#DNA = context.Holochain as HolochainLanguageDelegate;
+    this.#agent = context.agent; 
+  }
+
+  async createPublic(content: object): Promise<Address> {
+    console.log("AGENT LANGUAGE createPublic:", content);
+
+    if(!content['did'] || !content['perspective'] || !content['perspective'].links)
+      throw "Content must be an Agent object"
+
+    const agent = content as Agent
+    if(agent.did != this.#agent.did)
+      throw "Can't set Agent Expression for foreign DID - only for self"
+
+    //const agentExpressionOrdered = Object.keys(agent)
+    //  .sort()
+    //  .reduce((obj, key) => {
+    //    obj[key] = agent[key];
+    //    return obj;
+    //  }, {});
+    console.log("Storing my Agent Expression with DID:", agent.did);
+    const expression = this.#agent.createSignedExpression(agent);
+    console.log("Posting agent expression", expression);
+    await this.#DNA.call(
+      DNA_NICK,
+      "agent_store",
+      "create_agent_expression",
+      expression
+    );
+
+    return agent.did
+  }
 }

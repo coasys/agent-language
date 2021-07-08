@@ -16,8 +16,6 @@ pub struct Link {
 pub struct ExpressionProof {
     pub signature: String,
     pub key: String,
-    pub valid: Option<bool>,
-    pub invalid: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]

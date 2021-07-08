@@ -43,13 +43,9 @@ class Sharing implements PublicSharing {
     if(agent.did != this.#agent.did)
       throw "Can't set Agent Expression for foreign DID - only for self"
 
-    //const agentExpressionOrdered = Object.keys(agent)
-    //  .sort()
-    //  .reduce((obj, key) => {
-    //    obj[key] = agent[key];
-    //    return obj;
-    //  }, {});
-    //console.log("Storing my Agent Expression with DID:", agent.did);
+    if(!agent.directMessageLanguage)
+      agent.directMessageLanguage = null
+
     const expression = this.#agent.createSignedExpression(agent);
     //console.log("Posting agent expression", expression);
     await this.#DNA.call(

@@ -13,7 +13,7 @@ function constructorIcon(): string {
   return ConstructorIcon;
 }
 
-function interactions(a: Agent, expression: Address): Interaction[] {
+function interactions(expression: Address): Interaction[] {
   return [];
 }
 

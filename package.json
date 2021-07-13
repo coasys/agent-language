@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-icons": "rollup -c rollup.config.icons.js",
-    "build": "npm run build-icons && tsc && rollup -c",
+    "build": "npm run build-dna && npm run build-icons && tsc && rollup -c",
     "build-dna": "cd hc-dna && nix-shell --run ./build.sh && cd ..",
     "build-nix": "npm run build-dna && npm run build-icons && tsc && rollup -c",
     "dev": "tsc && rollup -c rollup.config.icons.js && rollup -c -w"
@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@perspect3vism/ad4m": "file:../ad4m",
+    "@perspect3vism/ad4m": "0.1.3",
     "@perspect3vism/rollup-plugin-dna": "^0.0.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.1.0",

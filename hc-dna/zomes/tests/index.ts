@@ -14,10 +14,12 @@ const installation: InstallAgentsHapps = [
 const orchestrator = new Orchestrator()
 
 orchestrator.registerScenario("create update agent expression", async (s, t) => {
-    const [alice] = await s.players([conductorConfig])
-    const [[alice_sc_happ]] = await alice.installAgentsHapps(installation)
+    const [alice_conductor, bob_conductor] = await s.players([conductorConfig, conductorConfig])
+    const [[alice]] = await alice_conductor.installAgentsHapps(installation)
+    const [[bob]] = await bob_conductor.installAgentsHapps(installation)
+    await s.shareAllNodes([alice_conductor, bob_conductor])
      
-    await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
+    await alice.cells[0].call("agent_store", "create_agent_expression",  
       {
         author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
         timestamp: new Date().toISOString(),
@@ -52,11 +54,11 @@ orchestrator.registerScenario("create update agent expression", async (s, t) => 
         },
       })
     
-    let getResp = await alice_sc_happ.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
+    let getResp = await alice.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
     t.ok(getResp);
     t.deepEqual(getResp.data.directMessageLanguage, "language://hashyHash");
 
-    await alice_sc_happ.cells[0].call("agent_store", "create_agent_expression",  
+    await alice.cells[0].call("agent_store", "create_agent_expression",  
     {
       author: "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC",
       timestamp: new Date().toISOString(),
@@ -91,9 +93,18 @@ orchestrator.registerScenario("create update agent expression", async (s, t) => 
       },
     })
 
-    let getResp2 = await alice_sc_happ.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
+    let getResp2 = await alice.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
     t.ok(getResp2);
     t.deepEqual(getResp2.data.directMessageLanguage, "language://hashyHash2");
+
+
+    //====================
+    await new Promise(r => setTimeout(r, 1000))
+    //====================
+
+    let bobResult = await bob.cells[0].call("agent_store", "get_agent_expression", "did:key:zQ3shc5AcaZyRo6qP3wuXvYT8xtiyFFL25RjMEuT81WMHEibC");
+    t.ok(bobResult);
+    t.deepEqual(bobResult.data.directMessageLanguage, "language://hashyHash2");
 })
 
 // Run all registered scenarios as a final step, and gather the report,

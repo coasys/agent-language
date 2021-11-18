@@ -1,4 +1,4 @@
-import type { Address, Agent, Expression, PublicSharing, LanguageContext, HolochainLanguageDelegate, ExpressionAdapter, AgentExpression, AgentService } from "@perspect3vism/ad4m";
+import type { Address, Agent, Expression, PublicSharing, LanguageContext, HolochainLanguageDelegate, ExpressionAdapter, AgentService } from "@perspect3vism/ad4m";
 import { DNA_NICK } from "./dna";
 
 export default class ExpressionAdapterImpl implements ExpressionAdapter {
@@ -12,7 +12,7 @@ export default class ExpressionAdapterImpl implements ExpressionAdapter {
     this.putAdapter = new Sharing(context)
   }
 
-  async get(did: Address): Promise<AgentExpression|void> {
+  async get(did: Address): Promise<Expression> {
     console.log("Getting expression with did", did);
     const expression = await this.#DNA.call(
       DNA_NICK,

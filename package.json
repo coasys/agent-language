@@ -1,6 +1,6 @@
 {
   "name": "profiles",
-  "version": "1.0.0",
+  "version": "0.0.7",
   "description": "AD4M Language implementation for Holochain profile DNA",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@perspect3vism/ad4m": "0.1.3",
+    "@perspect3vism/ad4m": "0.1.21",
     "@perspect3vism/rollup-plugin-dna": "^0.0.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.1.0",

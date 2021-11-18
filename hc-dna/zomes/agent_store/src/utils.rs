@@ -5,7 +5,7 @@ pub (crate) fn err(reason: &str) -> WasmError {
 }
 
 pub (crate) fn get_latest_link(base: EntryHash, tag: Option<LinkTag>) -> ExternResult<Option<Link>> {
-    let profile_info = get_links(base.into(), tag)?.into_inner();
+    let profile_info = get_links(base.into(), tag)?;
 
     // Find the latest
     let latest_info =

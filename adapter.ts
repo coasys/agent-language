@@ -46,8 +46,12 @@ class Sharing implements PublicSharing {
     if(!agent.directMessageLanguage)
       agent.directMessageLanguage = null
 
+    agent.perspective.links.forEach(link => {
+      delete link.proof.valid
+      delete link.proof.invalid
+    })
+
     const expression = this.#agent.createSignedExpression(agent);
-    //console.log("Posting agent expression", expression);
     await this.#DNA.call(
       DNA_NICK,
       "agent_store",

@@ -36,6 +36,8 @@
     "xmlhttprequest": "^1.8.0"
   },
   "dependencies": {
+    "email-validator": "^2.0.4",
+    "md5": "^2.3.0",
     "postcss": "^8.2.1"
   }
 }

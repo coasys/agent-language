@@ -14,5 +14,5 @@ serde = "1"
 chrono = { version = "0.4", features=["serde"] }
 thiserror = "1.0.20"
 
-hdk = "0.0.119"
-holo_hash = "0.0.16"
+hdk = "0.0.123"
+holo_hash = "0.0.20"

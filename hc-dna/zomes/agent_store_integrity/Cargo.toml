@@ -1,19 +1,17 @@
 [package]
 authors = ["josh@junto.foundation"]
 edition = "2018"
-name = "agent_store"
+name = "agent_store_integrity"
 version = "0.0.1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "agent_store"
+name = "agent_store_integrity"
 
 [dependencies]
 derive_more = "0"
 serde = "1"
 chrono = { version = "0.4", features=["serde"] }
-thiserror = "1.0.20"
 
+holochain_deterministic_integrity = "0.0.10"
 hdk = "0.0.138"
-holo_hash = "0.0.20"
-agent_store_integrity = { path = "../agent_store_integrity" }

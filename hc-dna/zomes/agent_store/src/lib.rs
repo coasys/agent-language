@@ -1,62 +1,9 @@
 use hdk::prelude::*;
-use chrono::{DateTime, Utc};
+use agent_store_integrity::{Did, AgentExpression, LinkTypes, EntryTypes};
 
 mod utils;
 
 use utils::{err, get_latest_link};
-
-#[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
-pub struct Link {
-    pub source: String,
-    pub target: String,
-    pub predicate: Option<String>
-}
-
-#[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
-pub struct ExpressionProof {
-    pub signature: String,
-    pub key: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
-pub struct LinkExpression {
-    author: String,
-    timestamp: DateTime<Utc>,    
-    data: Link,
-    proof: ExpressionProof,
-}
-
-#[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
-pub struct Perspective {
-    pub links: Vec<LinkExpression>
-}
-
-#[hdk_entry(id = "did", visbility = "public")]
-#[derive(Clone)]
-pub struct Did(String);
-
-#[hdk_entry(id = "agent_expression", visbility = "public")]
-#[derive(Clone)]
-pub struct AgentExpression {
-    pub author: String,
-    pub timestamp: DateTime<Utc>,
-    pub data: AgentExpressionData,
-    pub proof: ExpressionProof,
-}
-
-#[derive(Serialize, Deserialize, Clone, SerializedBytes, Debug)]
-pub struct AgentExpressionData {
-    did: String,
-    perspective: Option<Perspective>,
-    #[serde(rename(serialize = "directMessageLanguage"))]
-    #[serde(rename(deserialize = "directMessageLanguage"))]
-    direct_message_language: Option<String>
-}
-
-#[hdk_extern]
-fn entry_defs(_: ()) -> ExternResult<EntryDefsCallbackResult> {
-    Ok(vec![Path::entry_def(), AgentExpression::entry_def(), Did::entry_def()].into())
-}
 
 #[hdk_extern]
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
@@ -65,11 +12,12 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
 
 #[hdk_extern]
 pub fn create_agent_expression(agent_expression: AgentExpression) -> ExternResult<()> {
-    let did = Did(agent_expression.author.clone());
+    let did = EntryTypes::Did(Did(agent_expression.author.clone()));
     let did_hash = hash_entry(&did)?;
 
     create_entry(&did)?;
 
+    let agent_expression = EntryTypes::AgentExpression(agent_expression);
     let agent_expression_hash = hash_entry(&agent_expression)?;
     create_entry(&agent_expression)?;
 
@@ -77,6 +25,7 @@ pub fn create_agent_expression(agent_expression: AgentExpression) -> ExternResul
     create_link(
         did_hash,
         agent_expression_hash,
+        LinkTypes::ProfileLink,
         LinkTag::from("".as_bytes().to_owned()),
     )?;
 
@@ -98,10 +47,11 @@ pub fn get_agent_expression(did: Did) -> ExternResult<Option<AgentExpression>> {
                     Some(elem) => {
                         let exp_data: AgentExpression = elem
                             .entry()
-                            .to_app_option()?
-                            .ok_or(WasmError::Host(String::from(
+                            .to_app_option()
+                            .map_err(|sb_err| err(&format!("{}", sb_err)))?
+                            .ok_or(err(
                                 "Could not deserialize link expression data into Profile type",
-                            )))?;
+                            ))?;
                         Ok(Some(exp_data))
                     },
                     None => Ok(None)

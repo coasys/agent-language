@@ -1,11 +1,12 @@
 use hdk::prelude::*;
+use agent_store_integrity::LinkTypes;
 
 pub (crate) fn err(reason: &str) -> WasmError {
-    WasmError::Host(String::from(reason))
+    wasm_error!(WasmErrorInner::Host(String::from(reason)))
 }
 
 pub (crate) fn get_latest_link(base: EntryHash, tag: Option<LinkTag>) -> ExternResult<Option<Link>> {
-    let profile_info = get_links(base.into(), tag)?;
+    let profile_info = get_links(base, LinkTypes::ProfileLink, tag)?;
 
     // Find the latest
     let latest_info =

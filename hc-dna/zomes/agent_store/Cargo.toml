@@ -14,6 +14,6 @@ serde = "1"
 chrono = { version = "0.4", features=["serde"] }
 thiserror = "1.0.20"
 
-hdk = "0.0.139"
-holo_hash = "0.0.30"
+hdk = "0.0.143"
+holo_hash = "0.0.31"
 agent_store_integrity = { path = "../agent_store_integrity" }

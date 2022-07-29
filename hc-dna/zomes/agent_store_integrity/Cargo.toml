@@ -13,5 +13,5 @@ derive_more = "0"
 serde = "1"
 chrono = { version = "0.4", features=["serde"] }
 
-holochain_deterministic_integrity = "0.0.11"
-hdk = "0.0.139"
+hdi = "0.0.15"
+hdk = "0.0.143"

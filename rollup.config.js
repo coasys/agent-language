@@ -15,8 +15,8 @@ export default {
   external: [],
   output: {
     sourcemap: true,
-    format: "cjs",
-    name: "JuntoPerspective",
+    format: "es",
+    name: "AgentLanguage",
     file: "build/bundle.js",
     interop: "esModule",
     globals: {},

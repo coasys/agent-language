@@ -15,7 +15,7 @@ export default {
   external: [],
   output: {
     sourcemap: true,
-    format: "es",
+    format: "cjs",
     name: "AgentLanguage",
     file: "build/bundle.js",
     interop: "esModule",

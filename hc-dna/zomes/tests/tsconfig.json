@@ -8,9 +8,16 @@
       "forceConsistentCasingInFileNames": true,
       "allowSyntheticDefaultImports": true,
       "skipLibCheck": true,
-      "strict": true
+      "strict": true,
+    "skipDefaultLibCheck": true,
+    "outDir": "dist",
+    "declarationDir": "dist",
     },
     "include": [
       "ts/**/*"
-    ]
+    ],
+    "ts-node": {
+      "esm": true,
+      "experimentalSpecifierResolution": "node"
+    }
 }

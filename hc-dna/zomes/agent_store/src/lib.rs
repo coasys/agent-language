@@ -1,5 +1,5 @@
+use agent_store_integrity::{AgentExpression, Did, EntryTypes, LinkTypes};
 use hdk::prelude::*;
-use agent_store_integrity::{Did, AgentExpression, LinkTypes, EntryTypes};
 
 mod utils;
 
@@ -42,22 +42,28 @@ pub fn get_agent_expression(did: Did) -> ExternResult<Option<AgentExpression>> {
 
     match expression_links {
         Some(link) => {
-            match get(link.target, GetOptions::default())
-                .map_err(|error| err(format!("{}", error).as_ref()))? {
-                    Some(elem) => {
-                        let exp_data: AgentExpression = elem
-                            .entry()
-                            .to_app_option()
-                            .map_err(|sb_err| err(&format!("{}", sb_err)))?
-                            .ok_or(err(
-                                "Could not deserialize link expression data into Profile type",
-                            ))?;
-                        Ok(Some(exp_data))
-                    },
-                    None => Ok(None)
+            match get(
+                link.target
+                    .into_entry_hash()
+                    .expect("could not get action hash"),
+                GetOptions::default(),
+            )
+            .map_err(|error| err(format!("{}", error).as_ref()))?
+            {
+                Some(elem) => {
+                    let exp_data: AgentExpression = elem
+                        .entry()
+                        .to_app_option()
+                        .map_err(|sb_err| err(&format!("{}", sb_err)))?
+                        .ok_or(err(
+                            "Could not deserialize link expression data into Profile type",
+                        ))?;
+                    Ok(Some(exp_data))
                 }
+                None => Ok(None),
+            }
         }
-        None => Ok(None)
+        None => Ok(None),
     }
 }
 

@@ -11,7 +11,7 @@ test("Create update agent expression", async (t) => {
 
     await scenario.shareAllAgents();
      
-    await alice.cells[0].callZome({
+    const call1 = await alice.cells[0].callZome({
       zome_name: "agent_store", 
       fn_name: "create_agent_expression",  
       payload: {
@@ -47,7 +47,7 @@ test("Create update agent expression", async (t) => {
           invalid: false,
         },
       }
-    })
+    });
     
     let getResp = await alice.cells[0].callZome({
       zome_name: "agent_store", 

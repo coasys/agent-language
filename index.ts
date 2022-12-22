@@ -26,8 +26,8 @@ export default async function create(context: LanguageContext): Promise<Language
     //@ts-ignore
     [{ file: DNA, nick: DNA_NICK, zomeCalls:
       [
-        ["agent-store", "create_agent_expression"],
-        ["agent-store", "get_agent_expression"]
+        ["agent_store", "create_agent_expression"],
+        ["agent_store", "get_agent_expression"]
       ] 
     }], 
   );

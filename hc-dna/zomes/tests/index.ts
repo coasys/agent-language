@@ -1,13 +1,15 @@
-import { Scenario, runScenario } from '@holochain/tryorama'
+import { Scenario, runScenario, addAllAgentsToAllConductors, cleanAllConductors } from '@holochain/tryorama'
 import path from 'path'
 import test from "tape-promise/tape";
-
-const dnas = [{ path: path.join("../../workdir/agent-store.dna") }];
+import { createConductors } from "./utils";
 
 //@ts-ignore
 test("Create update agent expression", async (t) => {
   await runScenario(async (scenario: Scenario) => {
-    const [alice, bob] = await scenario.addPlayersWithHapps([dnas, dnas]);
+    const [aliceConductor, bobConductor] = await createConductors(2);
+    await addAllAgentsToAllConductors([aliceConductor.conductor, bobConductor.conductor]);
+    const alice = aliceConductor.agent_happ;
+    const bob = bobConductor.agent_happ;
 
     await scenario.shareAllAgents();
      
@@ -119,6 +121,9 @@ test("Create update agent expression", async (t) => {
     //@ts-ignore
     t.deepEqual(bobResult.data.directMessageLanguage, "language://hashyHash2");
 
+    await aliceConductor.conductor.shutDown();
+    await bobConductor.conductor.shutDown();
+    await cleanAllConductors();
     await scenario.cleanUp()
   })
 })
